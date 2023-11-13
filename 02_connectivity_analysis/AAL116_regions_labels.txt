@@ -1,0 +1,15 @@
+Occipital-L
+Occipital-R
+Frontal-L
+Frontal-R
+Parietal-L
+Parietal-R
+Temporal-L
+Temporal-R
+Subcortical-L
+Subcortical-R
+Crus-L
+Crus-R
+PLC-L
+PLC-R
+Vermis
