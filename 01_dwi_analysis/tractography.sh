@@ -21,15 +21,15 @@ SUB=${DIR:0:14} # example name: sub-control019
 ########################### STEP 1 ###################################
 #             		  Prepare data and directories					 #
 ######################################################################
-ATLAS="AAL116_intersect.nii.gz"
+ATLAS="AAL116.nii.gz"
 SUBDIR="${MAINDIR}/data/${DIR}"
 ANATDIR="${MAINDIR}/data/${SUB}" #example name: sub-control019
 ANAT="${ANATDIR}/${SUB}_restored-MPRAGE_brain.nii.gz"
 cd $SUBDIR
 
-# WHEN DOING FOR REAL, CHECK IF THERE IS MORE DATA WITH MORE BVALUES
 DWI="${SUBDIR}/*clean.nii.gz"
-if [ $DIR == "sub-patient009_ses-preictal" ]; then
+
+if [ $DIR == "sub-patient009_ses-preictal" ]; then # specific case for this patient
 	DWIMASK="${SUBDIR}/017*clean_mask.nii.gz"
 else
 	DWIMASK="${SUBDIR}/015*clean_mask.nii.gz"
@@ -44,7 +44,7 @@ cd mrtrix_outputs
 #	      		  Convert data to .mif format				   	     #
 ######################################################################
 
-# Convert data do mif fomat
+# Convert data do mif format
 mrconvert $DWI dwi.mif -fslgrad $BVEC $BVAL -force
 mrconvert $ANAT anat.mif -force
 
