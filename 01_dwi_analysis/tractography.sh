@@ -48,7 +48,7 @@ cd mrtrix_outputs
 mrconvert $DWI dwi.mif -fslgrad $BVEC $BVAL -force
 mrconvert $ANAT anat.mif -force
 
-# Convert mask do mif fomat
+# Convert mask do mif format
 mrconvert $DWIMASK mask.mif -force
 
 ########################## STEP 3 ###################################
