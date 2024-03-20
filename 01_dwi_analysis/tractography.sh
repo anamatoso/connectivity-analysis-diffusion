@@ -24,7 +24,7 @@ ATLAS="AAL116.nii.gz"
 if [ $ATLAS == "AAL116.nii.gz" ]; then
 	ATLASNAME="AAL116"
 else
-	ATLASNAME="Schaefer"
+	ATLASNAME="schaefer100cersubcort"
 fi
 
 SUBDIR="${MAINDIR}/data/${DIR}" #example name: sub-control019_ses-midcycle
