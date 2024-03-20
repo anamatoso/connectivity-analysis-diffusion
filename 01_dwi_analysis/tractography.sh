@@ -21,6 +21,12 @@ SUB=${DIR:0:14} # example name: sub-control019
 #             		  Prepare data and directories					 #
 ######################################################################
 ATLAS="AAL116.nii.gz"
+if [ $ATLAS == "AAL116.nii.gz" ]; then
+	ATLASNAME="AAL116"
+else
+	ATLASNAME="Schaefer"
+fi
+
 SUBDIR="${MAINDIR}/data/${DIR}" #example name: sub-control019_ses-midcycle
 ANATDIR="${MAINDIR}/data/${SUB}" #example name: sub-control019
 ANAT="${ANATDIR}/${SUB}_restored-MPRAGE_brain.nii.gz"
@@ -94,7 +100,7 @@ mrconvert atlas_2struct.nii.gz atlas_2struct.mif -force
 mrtransform atlas_2struct.mif -linear diff2struct_mrtrix.txt -inverse atlas_coreg.mif -force
 
 # Make sure the values of the atlas are integer
-mrcalc atlas_coreg.mif -round atlas.mif -force
+mrcalc atlas_coreg.mif -round atlas_${ATLASNAME}.mif -force
 
 ########################### STEP 6 ###################################
 #                 Run the streamline analysis                        #
@@ -111,7 +117,7 @@ tcksift2 -act 5tt_coreg.mif tracks.tck wmfod_norm.mif sift.txt -force
 ######################################################################
 
 #Creating the connectome 
-tck2connectome -symmetric -zero_diagonal -scale_invnodevol -tck_weights_in sift.txt tracks.tck atlas.mif "${MAINDIR}/matrix_data/${DIR}_matrix_mrtrix.csv" -force
+tck2connectome -symmetric -zero_diagonal -scale_invnodevol -tck_weights_in sift.txt tracks.tck atlas_${ATLASNAME}.mif "${MAINDIR}/matrix_data/${ATLASNAME}/${DIR}_matrix_mrtrix.csv" -force
 
 # Remove unneeded data from storage because it is not needed anymore
 rm -f 5tt_nocoreg.nii.gz 5tt_nocoreg.mif atlas_2struct.mif atlas_2struct.nii.gz mean_b0_processed.mif mean_b0_processed.nii.gz 5tt_vol0.nii.gz anat.mif atlas_coreg.mif
