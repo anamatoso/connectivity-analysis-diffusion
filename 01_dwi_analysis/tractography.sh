@@ -41,7 +41,7 @@ mkdir -p mrtrix_outputs
 cd mrtrix_outputs
 
 ########################### STEP 2 ###################################
-#	      		  Convert data to .mif format				   	     #
+#	      		  Convert data to .mif format		     #
 ######################################################################
 
 # Convert data do mif format
@@ -68,7 +68,7 @@ mtnormalise wmfod.mif wmfod_norm.mif gmfod.mif gmfod_norm.mif csffod.mif csffod_
 #            Create a GM/WM boundary for seed analysis               #
 ######################################################################
 
-# Extract all five tissue catagories (1=GM; 2=Subcortical GM; 3=WM; 4=CSF; 5=Pathological tissue)
+# Extract all five tissue categories (1=GM; 2=Subcortical GM; 3=WM; 4=CSF; 5=Pathological tissue)
 5ttgen fsl anat.mif 5tt_nocoreg.mif -premasked -nocrop -force
 
 #The following series of commands will take the average of the b0 images (which have the best contrast), convert them and the 5tt image to NIFTI format, and use it for coregistration.
@@ -76,7 +76,7 @@ dwiextract dwi.mif - -bzero | mrmath - mean mean_b0_processed.mif -axis 3 -force
 mrconvert mean_b0_processed.mif mean_b0_processed.nii.gz -force
 mrconvert 5tt_nocoreg.mif 5tt_nocoreg.nii.gz -force
 
-# Uses FSL commands fslroi and flirt to create a transformation matrix for regisitration between the tissue map and the b0 images
+# Uses FSL commands fslroi and flirt to create a transformation matrix for registration between the tissue map and the b0 images
 fslroi 5tt_nocoreg.nii.gz 5tt_vol0.nii.gz 0 1 #Extract the first volume of the 5tt dataset (since flirt can only use 3D images, not 4D images)
 
 flirt -in mean_b0_processed.nii.gz -ref 5tt_vol0.nii.gz -interp nearestneighbour -dof 6 -omat diff2struct_fsl.mat
@@ -89,7 +89,7 @@ mrtransform 5tt_nocoreg.mif -linear diff2struct_mrtrix.txt -inverse 5tt_coreg.mi
 rm -f 5tt_nocoreg.nii.gz 5tt_nocoreg.mif mean_b0_processed.mif mean_b0_processed.nii.gz 5tt_vol0.nii.gz anat.mif gmfod.mif gmfod_norm.mif csffod.mif csffod_norm.mif mask.mif wmfod.mif dwi.mif wm.txt gm.txt csf.txt
 
 ########################## STEP 5 ###################################
-#            		  Coregister atlas to the data                   #
+#            		  Coregister atlas to the data              #
 #####################################################################
 
 # Coregister atlas to struct space and convert to mrtrix format
@@ -113,7 +113,7 @@ tckgen -act 5tt_coreg.mif -seed_gmwmi gmwmseed_coreg.mif -maxlength 250 -select 
 tcksift2 -act 5tt_coreg.mif tracks.tck wmfod_norm.mif sift.txt -force
 
 ########################### STEP 7 ###################################
-#             		  Creating the connectome	                     #
+#             		  Creating the connectome	             #
 ######################################################################
 
 #Creating the connectome 
