@@ -2,25 +2,45 @@
 
 This repository provides the code used to analyse the data of migraine patients in the paper: [TBC]
 
-The overall pipeline can be seen the picture below:
+The overall pipeline can be seen in the picture below:
 
 <img width="1267" alt="pipeline" src="https://github.com/anamatoso/connectivity-analysis-diffusion/assets/78906907/8a960a21-a836-41f2-aa18-b04db62963f6">
 
 ## How to use 
 
+You'll need MRtrix, FSL and MATLAB installed on the computer you'll use to run the code. Then download this repository into a folder of your choosing by going to that folder and then cloning it:
+```bash
+git clone https://github.com/anamatoso/connectivity-analysis-diffusion.git
+```
+
+### Prepare data
+The data directory structure should be the following:
+```bash
+.
+├── tractography.sh                                            # DWI Script
+├── bvals.bval                                                 # b-values file
+├── data                                                       # Data folder
+    ├── sub-controlXXX_ses-[SESSION]                           # Folder with the dMRI files
+    │   ├── sub-controlXXX_ses-[SESSION]_clean.nii.gz          # dMRI image (already preprocessed)
+    │   ├── sub-controlXXX_ses-[SESSION]_clean_mask.nii.gz     # dMRI image mask 
+    │   └── sub-controlXXX_ses-[SESSION]_rotated_bvecs.bvec    # b-vectors
+    ├── sub-controlXXX                                         # Anatomic imge folder
+        └── sub-controlXXX_restored-MPRAGE_brain.nii.gz        # T1-weighted image
+    └── ...
+├── matrix_data                                                # Output data folder (created automatically)
+├── main.m                                                     # Main MATLAB Script
+└── ...                                                        # Other MATLAB files and folders
+```
+
 ### Tractography
-You'll need MRtrix and FSL installed and then run the file `tractography.sh` for every patient folder you have with dMRI data (images, bvecs). In this case, the bvals were the same for all patients and the T1 structural images were in a different anat folder. Should your directory structure be different, change Step 1 accordingly so that the variables point to the correct files.
+Run the file `tractography.sh` for every patient folder you have with dMRI data (sub-controlXXX_ses-[SESSION]).
 
-### Analysis
-You'll need MATLAB installed (I used the 2023a version, but older versions should  also work) as well as the NBS toolbox.
+Should your directory structure be different, just change Step 1 accordingly so that the variables point to the correct files.
 
-To run the code run the following commands:
-1) Clone this repository:
-    ```bash
-    git clone https://github.com/anamatoso/connectivity-analysis-diffusion.git
-    ```
-2) Open MATLAB, go into the repository (the folder you just downloaded) and run main.m in the command window of MATLAB:
-    ```MATLAB
-    run main.m
-    ```
-Note: don't forget to add the NBS folder to PATH in MATLAB.
+### Connectivity Analysis
+You'll need MATLAB installed (I used the 2023a version, but older versions should also work) as well as the NBS toolbox.
+Then open MATLAB, go into the repository and run main.m in the command window of MATLAB:
+```MATLAB
+run main.m
+```
+Note: don't forget to add the NBS folder to PATH in MATLAB before running the file.
