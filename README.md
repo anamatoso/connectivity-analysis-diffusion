@@ -2,6 +2,10 @@
 
 This repository provides the code used to analyse the data of migraine patients in the paper: [TBC]
 
+The overall pipeline can be seen the picture below:
+
+<img width="1267" alt="pipeline" src="https://github.com/anamatoso/connectivity-analysis-diffusion/assets/78906907/8a960a21-a836-41f2-aa18-b04db62963f6">
+
 ## How to use 
 
 ### Tractography
