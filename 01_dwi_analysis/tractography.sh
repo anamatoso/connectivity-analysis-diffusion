@@ -4,9 +4,8 @@ set -e
 MAINDIR=$(pwd)
 display_usage() {
 	echo "$(basename $0) [Subject and type of session]"
-	# echo "This script uses MRTrix to analyze diffusion data. It requires X arguments: 
-	# 	1) Subject DWI Directory. Example: sub-control019
-	#	2) Type of session. Example: ses-midcycle
+	# echo "This script uses MRTrix to analyze diffusion data. It requires 1 arguments: 
+	# 	1) Subject DWI Directory in the form of: sub-control019_ses-midcycle
 	}
 
 	if [ $# -le 0 ] # if there are 1 argument or less
@@ -22,18 +21,13 @@ SUB=${DIR:0:14} # example name: sub-control019
 #             		  Prepare data and directories					 #
 ######################################################################
 ATLAS="AAL116.nii.gz"
-SUBDIR="${MAINDIR}/data/${DIR}"
+SUBDIR="${MAINDIR}/data/${DIR}" #example name: sub-control019_ses-midcycle
 ANATDIR="${MAINDIR}/data/${SUB}" #example name: sub-control019
 ANAT="${ANATDIR}/${SUB}_restored-MPRAGE_brain.nii.gz"
 cd $SUBDIR
 
 DWI="${SUBDIR}/*clean.nii.gz"
-
-if [ $DIR == "sub-patient009_ses-preictal" ]; then # specific case for this patient
-	DWIMASK="${SUBDIR}/017*clean_mask.nii.gz"
-else
-	DWIMASK="${SUBDIR}/015*clean_mask.nii.gz"
-fi
+DWIMASK="${SUBDIR}/015*clean_mask.nii.gz"
 BVEC="${SUBDIR}/*rotated_bvecs.bvec"
 BVAL="bvals_132dir.bval"
 
@@ -119,7 +113,7 @@ tcksift2 -act 5tt_coreg.mif tracks.tck wmfod_norm.mif sift.txt -force
 #Creating the connectome 
 tck2connectome -symmetric -zero_diagonal -scale_invnodevol -tck_weights_in sift.txt tracks.tck atlas.mif "${MAINDIR}/matrix_data/${DIR}_matrix_mrtrix.csv" -force
 
-# Remove unneeded data from storage because it is needed anymore
+# Remove unneeded data from storage because it is not needed anymore
 rm -f 5tt_nocoreg.nii.gz 5tt_nocoreg.mif atlas_2struct.mif atlas_2struct.nii.gz mean_b0_processed.mif mean_b0_processed.nii.gz 5tt_vol0.nii.gz anat.mif atlas_coreg.mif
 
 cd $MAINDIR
