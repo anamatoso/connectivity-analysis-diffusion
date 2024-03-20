@@ -10,7 +10,7 @@ suffix="schaefer100cersubcort"; % AAL116 schaefer100cersubcort
 aggregate = false;
 
 % Define variables
-folder = "matrix_data_unbiased/"+suffix;
+folder = "matrix_data/"+suffix;
 sessions = ["midcycle" "interictal"];
 idx_map_s100=[ones(1,9), 2*ones(1,6), 4*ones(1,8), 5*ones(1,7), 7*ones(1,3), 3*ones(1,4), 6*ones(1,13),...
             8*ones(1,8), 9*ones(1,8), 11*ones(1,7), 12*ones(1,5), 14*ones(1,2), 10*ones(1,9), 13*ones(1,11),...
