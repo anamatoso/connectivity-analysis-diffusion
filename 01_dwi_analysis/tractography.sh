@@ -27,7 +27,7 @@ ANAT="${ANATDIR}/${SUB}_restored-MPRAGE_brain.nii.gz"
 cd $SUBDIR
 
 DWI="${SUBDIR}/*clean.nii.gz"
-DWIMASK="${SUBDIR}/015*clean_mask.nii.gz"
+DWIMASK="${SUBDIR}/*clean_mask.nii.gz"
 BVEC="${SUBDIR}/*rotated_bvecs.bvec"
 BVAL="bvals_132dir.bval"
 
