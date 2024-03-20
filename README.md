@@ -17,7 +17,7 @@ You'll need MATLAB installed (I used the 2023a version, but older versions shoul
 To run the code run the following commands:
 1) Clone this repository:
     ```bash
-    git clone https://github.com/anamatoso/connectivity-analysis-diffusion
+    git clone https://github.com/anamatoso/connectivity-analysis-diffusion.git
     ```
 2) Open MATLAB, go into the repository (the folder you just downloaded) and run main.m in the command window of MATLAB:
     ```MATLAB
