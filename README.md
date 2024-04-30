@@ -1,6 +1,6 @@
 # Structural connectivity analysis in migraine patients
 
-This repository provides the code used to analyse the data of migraine patients in the paper: [TBC]
+This repository provides the code used to analyze the data of migraine patients in the paper: [Structural connectome changes in episodic migraine: the role of the cerebellum](https://doi.org/10.1101/2024.04.26.591265)
 
 The overall pipeline can be seen in the picture below:
 
@@ -8,7 +8,7 @@ The overall pipeline can be seen in the picture below:
 
 ## How to use 
 
-You'll need MRtrix, FSL and MATLAB installed on the computer you'll use to run the code. Then download this repository into a folder of your choosing by going to that folder and then cloning it:
+You'll need MRtrix, FSL, and MATLAB installed on the computer you'll use to run the code. Then download this repository into a folder of your choosing by going to that folder and then cloning it:
 ```bash
 git clone https://github.com/anamatoso/connectivity-analysis-diffusion.git
 ```
