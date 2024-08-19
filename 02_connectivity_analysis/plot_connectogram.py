@@ -13,9 +13,11 @@ except ModuleNotFoundError:
     import numpy as np
 try:
     import matplotlib.pyplot as plt
+    plt.rcParams['svg.fonttype'] = 'none'
 except ModuleNotFoundError:
     subprocess.run([sys.executable, '-m', 'pip', 'install', 'matplotlib'])
     import matplotlib.pyplot as plt
+    plt.rcParams['svg.fonttype'] = 'none'
 try:
     from mne.viz import circular_layout
     from mne_connectivity.viz import plot_connectivity_circle
@@ -71,36 +73,17 @@ def connectogram(filename,separate_hemispheres):
         node_order_final = label_names
 
     
-    
     # Determine the nodes' angles in the connectogram
     node_angles = circular_layout(label_names, node_order_final, start_pos=90,group_boundaries=group_boundaries_final)
-    #print(node_order_final)
-
-    # Set node colors
 
     # Get colors of nodes
     node_colors = open("ROI_colors.txt", "r").read().splitlines()
 
-
-    # standard_colors = ['lightskyblue', 'sandybrown', 'mediumpurple','limegreen', 'royalblue', 'gold', 'pink']
-    # last_node_colors = ['firebrick','firebrick','slategrey','slategrey','slategrey','slategrey','slategrey']
-    
-    # n_rois=len(label_names) # AAL=15
-    # extra_rois = len(standard_colors)*2+len(last_node_colors) - n_rois
-    
-
-    # standard_colors=standard_colors[0:int(len(standard_colors)-(extra_rois/2))]
-
-
-    # node_colors = standard_colors+standard_colors+last_node_colors
-
-
-
     # Create plot
     fig, ax = plt.subplots(1, 1, figsize=(20, 20), facecolor='white', subplot_kw=dict(projection="polar"))
-    plot_connectivity_circle(connectivity, label_names, n_lines=number_edges, colormap="Greys",node_colors=node_colors,
+    plot_connectivity_circle(connectivity, label_names, n_lines=number_edges, colormap="Greys", node_colors=node_colors,
                             node_angles=node_angles, facecolor='white', textcolor='black', node_edgecolor='white', ax=ax,
-                            colorbar_pos=(-0.1, -0.1), padding=3,fontsize_names=15,fontsize_colorbar=11,vmax=6,vmin=0,linewidth=5)
+                            colorbar_pos=(-0.1, -0.1), padding=3, fontsize_names=15, fontsize_colorbar=11, vmin=0, linewidth=5)
     fig.tight_layout()
     fig.axes[1]._colorbar.set_ticks=[-1,1,2]
 
