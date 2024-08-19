@@ -203,3 +203,13 @@ if ~aggregate
 end
 
 clear x y p v name metrics_labels_list m nnodes s version_metrics vector new_metrics_struct new_matrices_struct new_metrics_labels maindir
+%%
+if ~aggregate
+    for i=1:length(mat)
+        for j=1:length(mat)
+            if mat(i,j)==1
+                disp(node_labels(i)+", " +node_labels(j))
+            end
+        end
+    end
+end
