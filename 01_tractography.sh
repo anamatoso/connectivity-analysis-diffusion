@@ -2,29 +2,41 @@
 set -e
 
 MAINDIR=$(pwd)
+
 display_usage() {
-	echo "$(basename $0) [Subject and type of session]"
-	# echo "This script uses MRTrix to analyze diffusion data. It requires 1 arguments: 
-	# 	1) Subject DWI Directory in the form of: sub-control019_ses-midcycle
+	echo ""
+	tput bold 
+	echo "Description"
+	tput sgr0
+	echo ""
+	echo "This script uses MRTrix and FSL to analyze diffusion data using a certain atlas."
+	echo ""
+	tput bold 
+	echo "Usage"
+	tput sgr0
+	echo ""
+	echo "./$(basename $0) [Subject and type of session]"
+	echo "It requires 2 argument: Subject DWI Directory (eg: sub-control019_ses-midcycle) and the name of the atlas (either AAL116 or schaefer100cersubcort)."
 	}
 
-	if [ $# -le 0 ] # if there are 1 argument or less
-	then
-		display_usage
-		exit 1
-	fi
+if [ $# -le 0 ] # if there are 1 argument or less
+then
+	display_usage
+	exit 1
+fi
 
 DIR=$1 #example name: sub-control019_ses-midcycle
 SUB=${DIR:0:14} # example name: sub-control019
+ATLASNAME=$2
 
 ########################### STEP 1 ###################################
 #             		  Prepare data and directories					 #
 ######################################################################
-ATLAS="AAL116.nii.gz"
-if [ $ATLAS == "AAL116.nii.gz" ]; then
-	ATLASNAME="AAL116"
+
+if [ $ATLASNAME == "AAL116" ]; then
+	ATLAS="AAL116.nii.gz"
 else
-	ATLASNAME="schaefer100cersubcort"
+	ATLAS="schaefer100cersubcort.nii.gz"
 fi
 
 SUBDIR="${MAINDIR}/data/${DIR}" #example name: sub-control019_ses-midcycle
