@@ -8,7 +8,7 @@ display_usage() {
 	#   3) Name of atlas
 	}
 
-	 if [ $# -le 1 ] # if there are 1 argument or less
+	 if [ $# -l 3 ] # if there are less than 3 arguments
 	  then
 	  	display_usage
 	 	exit 1
