@@ -8,7 +8,9 @@ The overall pipeline can be seen in the picture below:
 
 ## How to use 
 
-You'll need MRtrix, FSL, and MATLAB installed on the computer you'll use to run the code. Then download this repository into a folder of your choosing by going to that folder and then cloning it:
+You'll need __MRtrix, FSL, and MATLAB installed__ on the computer you'll use to run the code. I used MRtrix version 3.0.3, FSL version 6.0.5 and MATLAB 2023a version (but older versions of MATLAB should also work).
+
+Then download this repository into a folder of your choosing by going to that folder and then cloning it:
 ```bash
 git clone https://github.com/anamatoso/connectivity-analysis-diffusion.git
 ```
@@ -28,8 +30,14 @@ The data directory structure should be the following:
         └── sub-controlXXX_restored-MPRAGE_brain.nii.gz        # T1-weighted image
     └── ...
 ├── matrix_data                                                # Output data folder (created automatically)
-├── main.m                                                     # Main MATLAB Script
-└── ...                                                        # Other MATLAB files and folders
+├── streamline_count 
+    └── streamline_count_JHUlabels                            
+        ├── sub-controlXXX_ses-[SESSION]_JHUlabels.txt
+        └── ...
+├── main.m                                                     # Main MATLAB script for the connectivity analysis
+├── streamline_count_analysis.m                                # Matlab script to analyse the streamline count
+├── dados_clinicos_[GROUP].csv                                 # CSVs that contain the clinical data of each group (patients and controls)
+└── ...                                                        # Other files and folders
 ```
 
 ### Tractography
@@ -37,10 +45,10 @@ Run the file `tractography.sh` for every patient folder you have with dMRI data 
 
 Should your directory structure be different, just change Step 1 accordingly so that the variables point to the correct files.
 
+Then run the `count_streamlines.sh` file which will create the streamline_count folder that will store the number of streamlines in each region of the JHUlabels white matter atlas.
+
 ### Connectivity Analysis
 You'll need MATLAB installed (I used the 2023a version, but older versions should also work) as well as the NBS toolbox.
-Then open MATLAB, go into the repository and run main.m in the command window of MATLAB:
-```MATLAB
-run main.m
-```
-Note: don't forget to add the NBS folder to PATH in MATLAB before running the file.
+Then open MATLAB, go into the repository and run connectivity_analysis.m and streamline_count_analysis.m.
+
+Note: don't forget to add the NBS folder and the auxilliary functions folder to the PATH in MATLAB before running the files.
