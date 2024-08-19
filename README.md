@@ -19,7 +19,8 @@ git clone https://github.com/anamatoso/connectivity-analysis-diffusion.git
 The data directory structure should be the following:
 ```bash
 .
-├── tractography.sh                                            # DWI Script
+├── 01_tractography.sh                                         # Tractography script
+├── 02_count_streamlines.sh                                    # Count streamlines script
 ├── bvals.bval                                                 # b-values file
 ├── data                                                       # Data folder
     ├── sub-controlXXX_ses-[SESSION]                           # Folder with the dMRI files
@@ -29,26 +30,26 @@ The data directory structure should be the following:
     ├── sub-controlXXX                                         # Anatomic imge folder
         └── sub-controlXXX_restored-MPRAGE_brain.nii.gz        # T1-weighted image
     └── ...
-├── matrix_data                                                # Output data folder (created automatically)
-├── streamline_count 
+├── matrix_data                                                # Output data folder (will be created automatically)
+├── streamline_count                                           # Output streamline count folder (will be created automatically)
     └── streamline_count_JHUlabels                            
         ├── sub-controlXXX_ses-[SESSION]_JHUlabels.txt
         └── ...
-├── main.m                                                     # Main MATLAB script for the connectivity analysis
-├── streamline_count_analysis.m                                # Matlab script to analyse the streamline count
+├── 03_connectivity_analysis.m                                 # MATLAB script for the connectivity analysis
+├── 04_streamline_count_analysis.m                             # Matlab script to analyse the streamline count
 ├── dados_clinicos_[GROUP].csv                                 # CSVs that contain the clinical data of each group (patients and controls)
 └── ...                                                        # Other files and folders
 ```
 
 ### Tractography
-Run the file `tractography.sh` for every patient folder you have with dMRI data (sub-controlXXX_ses-[SESSION]).
+Run the file `01_tractography.sh` for every patient folder you have with dMRI data (sub-controlXXX_ses-[SESSION]).
 
 Should your directory structure be different, just change Step 1 accordingly so that the variables point to the correct files.
 
-Then run the `count_streamlines.sh` file which will create the streamline_count folder that will store the number of streamlines in each region of the JHUlabels white matter atlas.
+Then run the `02_count_streamlines.sh` file which will create the streamline_count folder that will store the number of streamlines in each region of the JHUlabels white matter atlas.
 
 ### Connectivity Analysis
 You'll need MATLAB installed (I used the 2023a version, but older versions should also work) as well as the NBS toolbox.
-Then open MATLAB, go into the repository and run connectivity_analysis.m and streamline_count_analysis.m.
+Then open MATLAB, go into the repository and run `03_connectivity_analysis.m` and `04_streamline_count_analysis.m`.
 
 Note: don't forget to add the NBS folder and the auxilliary functions folder to the PATH in MATLAB before running the files.
