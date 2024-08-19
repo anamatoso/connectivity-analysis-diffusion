@@ -2,12 +2,12 @@
 clearvars
 close all
 maindir=pwd;
-
+maindir=string(maindir);
 %% Load connectivity data
 
 % Define situation
 suffix="schaefer100cersubcort"; % AAL116 schaefer100cersubcort
-aggregate = false;
+aggregate = true;
 
 % Define variables
 folder = "matrix_data/"+suffix;
@@ -34,11 +34,18 @@ if aggregate % If we want to aggregate nodes into bigger regions
     for s = 1:length(sessions)
         [matrices_struct.(sessions(s)),~, ~, ~, ~] = load_matrices(folder,sessions(s),idx_map);
     end
+
+    % Load the node labels
+    node_labels=importdata(maindir+'/'+suffix+'_regions_labels.txt');
+
 else
     % Load data without index mapping since the nodes wont be aggregated
     for s = 1:length(sessions)
         [matrices_struct.(sessions(s)),~, ~, ~, ~] = load_matrices(folder,sessions(s));
     end
+    % Load the node labels
+    node_labels=importdata(maindir+'/'+suffix+'_labels.txt');
+
 end
 
 % Calculate number of nodes
@@ -57,12 +64,12 @@ end
 
 % Get names of metrics depending on whether there is aggregation
 if ~aggregate
-    metrics_labels.version1=get_label_metrics(1,importdata(maindir+'/'+suffix+'_labels.txt'));
-    metrics_labels.version2=get_label_metrics(2,importdata(maindir+'/'+suffix+'_labels.txt'));
+    metrics_labels.version1=get_label_metrics(1,node_labels);
+    metrics_labels.version2=get_label_metrics(2,node_labels);
     disp(suffix + " not aggregated")
 else
-    metrics_labels.version1=get_label_metrics(1,importdata(maindir+'/'+suffix+'_regions_labels.txt'));
-    metrics_labels.version2=get_label_metrics(2,importdata(maindir+'/'+suffix+'_regions_labels.txt'));
+    metrics_labels.version1=get_label_metrics(1,node_labels);
+    metrics_labels.version2=get_label_metrics(2,node_labels);
     disp(suffix + " aggregated")
 end
 
@@ -78,12 +85,13 @@ for v=1:2
         x = metrics_struct.(name).(sessions{1})(m,:);
         y = metrics_struct.(name).(sessions{2})(m,:);
         p=ranksum(x,y);
-    
         if (p<0.05 && v==2) || (p<0.05/nnodes && v==1)
             disp(m+", "+metrics_labels_list(m)+": "+p)
             % figure("Color","white")
             % boxplot([x y],[ones(size(x)) 2*ones(size(y))],'Labels',sessions)
             % title(metrics_labels_list(m),"FontSize",20,'Interpreter','none');set(gca,"FontSize",15)
+        else
+            disp(m+", "+metrics_labels_list(m)+": "+p + " ns")
         end
     end
 end
