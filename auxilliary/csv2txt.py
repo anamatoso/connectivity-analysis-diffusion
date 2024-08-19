@@ -22,12 +22,12 @@ def csv_to_txt_folder(csv_folder, txt_folder):
             txt_file_path = os.path.join(txt_folder, txt_filename)
             
             # Read the CSV file and write its contents to a TXT file
-            with open(csv_file_path, mode='r', newline='', encoding='utf-8') as csv_file:
+            with open(csv_file_path, mode='r') as csv_file:
                 csv_reader = csv.reader(csv_file)
                 
-                with open(txt_file_path, mode='w', encoding='utf-8') as txt_file:
+                with open(txt_file_path, mode='w') as txt_file:
                     for row in csv_reader:
-                        txt_file.write('\t'.join(row) + '\n')
+                        txt_file.write(' '.join(row) + '\n')
 
     print(f"Converted CSV files in '{csv_folder}' to TXT files in '{txt_folder}'.")
 

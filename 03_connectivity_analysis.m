@@ -5,9 +5,9 @@ maindir=pwd;
 maindir=string(maindir);
 %% Load connectivity data
 
-% Define situation
-suffix="schaefer100cersubcort"; % AAL116 schaefer100cersubcort
-aggregate = true;
+% Define situation (CHANGE IF NEEDED)
+suffix="AAL116"; % Options: AAL116, schaefer100cersubcort
+aggregate = false; % Options: true (for connectivity metrics), false (for NBS)
 
 % Define variables
 folder = "matrix_data/"+suffix;
@@ -87,9 +87,11 @@ for v=1:2
         p=ranksum(x,y);
         if (p<0.05 && v==2) || (p<0.05/nnodes && v==1)
             disp(m+", "+metrics_labels_list(m)+": "+p)
-            % figure("Color","white")
-            % boxplot([x y],[ones(size(x)) 2*ones(size(y))],'Labels',sessions)
-            % title(metrics_labels_list(m),"FontSize",20,'Interpreter','none');set(gca,"FontSize",15)
+
+            % Plot boxplots if significant
+            figure("Color","white")
+            boxplot([x y],[ones(size(x)) 2*ones(size(y))],'Labels',sessions)
+            title(metrics_labels_list(m),"FontSize",20,'Interpreter','none');set(gca,"FontSize",15)
         else
             disp(m+", "+metrics_labels_list(m)+": "+p + " ns")
         end
@@ -133,12 +135,6 @@ for v=1:2
             
             if (p<0.05 && v==2) || (p<0.05/nnodes && v==1)
                 disp(metrics_labels_list(m)+" x "+string(clinical_data_names{d})+": R="+R+", p="+p)
-                % figure("Color","white")
-                % mdl = fitlm(table1(:,d),table2(:,m));
-                % plot(mdl,"MarkerSize", 7, "Marker", "o");set(gca,"FontSize",15)
-                % xlabel(string(clinical_data_names{d}));
-                % ylabel(metrics_labels.(name)(m))
-                % disp(v+", "+m+", "+d+", "+R+", "+p+", ")
             end
         end
     end
@@ -178,80 +174,79 @@ for v=1:2
     end
 end
 
-
-
-%% NBS
+%% NBS 
 if ~aggregate
-    disp("NBS---------")
+    % Turn connectivity matrices csvs into txt to NBS to read
+    !./pyenv/bin/python ./auxilliary/csv2txt.py
+    
+    % Global variables
+    UI.method.ui='Run NBS'; 
+    UI.test.ui='t-test';
+    UI.size.ui='Extent';
+    UI.perms.ui='5000';
+    UI.alpha.ui='0.05';
+    UI.exchange.ui='';
+    if suffix == "AAL116"
+        UI.node_coor.ui='./NBS1.2/AAL/aalCOG.txt'; % Must be on the NBS folder
+        UI.node_label.ui='./NBS1.2/AAL/aalLABELS.txt'; % Must be on the NBS folder
+        UI.matrices.ui='./matrix_data_txt/AAL116/sub-control019_ses-midcycle_matrix_mrtrix_AAL116.txt';
+    else
+        UI.node_coor.ui='./auxilliary/schaefer100subcortcer_coord.txt'; 
+        UI.node_label.ui='./auxilliary/schaefer100cersubcort_labels.txt';
+        UI.matrices.ui ='./matrix_data_txt/schaefer100cersubcort/sub-control019_ses-midcycle_matrix_mrtrix_schaefer100cersubcort.txt';
+    end
+    
+    UI.thresh.ui='3.1';
+    UI.design.ui='./auxilliary/design_matrix.txt';
+    
+    % Run with -1 1 contrast
+    UI.contrast.ui='[-1,1,0]';
+    nbs=NBSrun(UI,'');
+    p=nbs.NBS.pval;
+    disp(p)
+    if ~isempty(nbs.NBS.con_mat)
+        result=nbs.NBS.con_mat{1};
+        save("stat_"+suffix+"c-11","result") % Save run
+    end
+    
+    % Run with 1 -1 contrast
+    UI.contrast.ui='[1,-1,0]';
+    nbs=NBSrun(UI,'');
+    p=nbs.NBS.pval;
+    if ~isempty(nbs.NBS.con_mat)
+        result=nbs.NBS.con_mat{1};
+        save("stat_"+suffix+"_c1-1","result") % Save run
+    end
+    
+    % Display names of pairs of nodes that for a significant connection
+    % according to NBS
+
+    disp("NBS contrast [-1,1,0] ---------")
     % Load NBS matrix
-    load("NBS_results/stats_uncorrected_"+suffix+"unbiased_t31.mat")
-    mat = stats.midinter.contrast(2).conmat; mat = full(cell2mat(mat));mat = mat+mat';
-    
-    % Get remap
-    vector=sum(mat);vector(vector>0)=1;
-    %idx_map=(1:length(mat)).* vector;
-    
-    % Create new matrices
-    for s = 1:length(sessions)
-
-        % Mask with NBS binary matrix
-        new_matrices_struct.(sessions(s))=matrices_struct.(sessions(s)).*mat;
-        
-        % Remove rows and columns without significant edges
-        for v=length(vector):-1:1
-            if vector(v)==0
-                new_matrices_struct.(sessions(s))(v,:,:)=[];
-                new_matrices_struct.(sessions(s))(:,v,:)=[];
+    load("stat_"+suffix+"_c-11.mat")
+    %mat = stats.midinter.contrast(2).conmat; mat = full(cell2mat(mat));mat = mat+mat';
+    result=full(result);result = result+result';
+    % Display significant connections
+    for i=1:length(result)
+        for j=1:length(result)
+            if result(i,j)==1
+                disp(node_labels(i)+", " +node_labels(j))
             end
         end
     end
 
-    %vector=vector(vector>0);idx_map=idx_map(idx_map>0);
-
-
-    % Calculate metrics
-    for version_metrics = 1:2
-        for s = 1:length(sessions)
-            new_metrics_struct.("version"+string(version_metrics)).(sessions(s)) = connectivity_metrics(new_matrices_struct.(sessions(s)),version_metrics,"Not Normalize");
-        end
-    end
-    new_metrics_labels.version2=metrics_labels.version2;
-    new_metrics_labels.version1=metrics_labels.version1(vector>0);
-
-    % Analysis of metrics
-    nnodes=length(vector(vector>0));
-    for v=1:2
-        name="version"+v;
-        metrics_labels_list = new_metrics_labels.(name);
-        for m = 1:length(metrics_labels_list)
-        
-            x = new_metrics_struct.(name).(sessions{1})(m,:);
-            y = new_metrics_struct.(name).(sessions{2})(m,:);
-            p=ranksum(x,y);
-        
-            if (p<0.05 && v==2) || (p<0.05/nnodes && v==1)
-                disp(m+", "+metrics_labels_list(m)+": "+p)
-                % figure("Color","white")
-                % boxplot([x y],[ones(size(x)) 2*ones(size(y))],'Labels',sessions)
-                % title(metrics_labels_list(m),"FontSize",20,'Interpreter','none');set(gca,"FontSize",15)
-            end
-        end
-    end
-
-
-
-
-
-end
-
-clear x y p v name metrics_labels_list m nnodes s version_metrics vector new_metrics_struct new_matrices_struct new_metrics_labels maindir
-%%
-if ~aggregate
-    for i=1:length(mat)
-        for j=1:length(mat)
-            if mat(i,j)==1
+    disp("NBS contrast [1,-1,0] ---------")
+    % Load NBS matrix
+    load("stat_"+suffix+"_c1-1.mat")
+    %mat = stats.midinter.contrast(2).conmat; mat = full(cell2mat(mat));mat = mat+mat';
+    result=full(result);result = result+result';
+    % Display significant connections
+    for i=1:length(result)
+        for j=1:length(result)
+            if result(i,j)==1
                 disp(node_labels(i)+", " +node_labels(j))
             end
         end
     end
 end
+
