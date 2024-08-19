@@ -39,7 +39,7 @@ for region = 1:n_nodes
 
 end
 
-clear p x group region
+clear p x y group region
 
 %% GLM including age as covariate
 
