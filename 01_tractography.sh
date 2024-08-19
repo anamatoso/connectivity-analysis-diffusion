@@ -19,19 +19,19 @@ display_usage() {
 	echo "It requires 2 argument: Subject DWI Directory (eg: sub-control019_ses-midcycle) and the name of the atlas (either AAL116 or schaefer100cersubcort)."
 	}
 
-if [ $# -le 0 ] # if there are 1 argument or less
+if [ $# -l 2 ] # if there are less than 2 arguments
 then
 	display_usage
 	exit 1
 fi
 
-DIR=$1 #example name: sub-control019_ses-midcycle
-SUB=${DIR:0:14} # example name: sub-control019
-ATLASNAME=$2
-
 ########################### STEP 1 ###################################
 #             		  Prepare data and directories					 #
 ######################################################################
+
+DIR=$1 #example name: sub-control019_ses-midcycle
+SUB=${DIR:0:14} # example name: sub-control019
+ATLASNAME=$2
 
 if [ $ATLASNAME == "AAL116" ]; then
 	ATLAS="AAL116.nii.gz"

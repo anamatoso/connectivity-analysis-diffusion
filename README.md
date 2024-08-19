@@ -31,6 +31,8 @@ The data directory structure should be the following:
         └── sub-controlXXX_restored-MPRAGE_brain.nii.gz        # T1-weighted image
     └── ...
 ├── matrix_data                                                # Output data folder (will be created automatically)
+    ├── ALL116                                                 # Folder with the connectivity matrices using the AAL116 atlas
+    └── schaefer100cersubcort                                  # Folder with the connectivity matrices using the schaefer100cersubcort atlas
 ├── streamline_count                                           # Output streamline count folder (will be created automatically)
     └── streamline_count_JHUlabels                            
         ├── sub-controlXXX_ses-[SESSION]_JHUlabels.txt
@@ -47,6 +49,21 @@ Run the file `01_tractography.sh` for every patient folder you have with dMRI da
 Should your directory structure be different, just change Step 1 accordingly so that the variables point to the correct files.
 
 Then run the `02_count_streamlines.sh` file which will create the streamline_count folder that will store the number of streamlines in each region of the JHUlabels white matter atlas.
+
+### Python setup
+To make it easier and compartmentalized, create a python environment using. pyenv is the name of the environment, but you can name it how you want, but the rest of the code will assume that the name is pyenv, so change it appropriately if necessary.
+
+```bash
+python -m venv pyenv
+```
+
+Then activate it, install the packages from the requirements file and deactivate it:
+
+```bash
+source ./[ENV_NAME]/bin/activate
+pip install -r requirements.txt
+deactivate
+```
 
 ### Connectivity Analysis
 You'll need MATLAB installed (I used the 2023a version, but older versions should also work) as well as the NBS toolbox.

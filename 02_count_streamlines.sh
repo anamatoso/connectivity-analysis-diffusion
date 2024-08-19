@@ -9,17 +9,17 @@ display_usage() {
 	echo "Description"
 	tput sgr0
 	echo ""
-	echo "This script uses MRTrix to count the streamlines that pass through each ROI of a predefined atlas."
+	echo "This script uses MRTrix and FSL to count the streamlines that pass through each ROI of a predefined atlas."
 	echo ""
 	tput bold 
 	echo "Usage"
 	tput sgr0
 	echo ""
 	echo "./$(basename $0) [Subject and type of session]"
-	echo "It requires 2 argument: Subject DWI Directory (eg: sub-control019_ses-midcycle) and the name of the atlas (that should be the name of the file and will also function as the suffix of the files created)."
+	echo "It requires 1 argument: Subject DWI Directory (eg: sub-control019_ses-midcycle)."
 	}
 
-if [ $# -le 0 ] # if there are 1 argument or less
+if [ $# -l 1 ] # if there is less than 1 argument
 then
 	display_usage
 	exit 1
