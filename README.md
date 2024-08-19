@@ -60,7 +60,7 @@ python -m venv pyenv
 Then activate it, install the packages from the requirements file and deactivate it:
 
 ```bash
-source ./[ENV_NAME]/bin/activate
+source ./pyenv/bin/activate
 pip install -r requirements.txt
 deactivate
 ```
