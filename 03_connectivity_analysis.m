@@ -20,14 +20,27 @@ idx_map_AAL116=[repmat([3,4],[1,17]), 5,6,9,10,7,8,9,10, repmat([1,2],[1,7]), re
     repmat([9,10],[1,4]),repmat([7,8],[1,6]),...
     repmat([11,12],[1,2]),repmat([13,14],[1,7]),15*ones(1,8)];
 
-
 if aggregate % If we want to aggregate nodes into bigger regions
 
     % Check which index mapping to use
     if suffix=="AAL116"
         idx_map=idx_map_AAL116;
+        labelregions=["L Occipital" "R Occipital" "L Frontal" "R Frontal"...
+        "L Parietal" "R Parietal" "L Temporal" "R Temporal" "L Subcortical" "R Subcortical"...
+        "L Crus" "R Crus" "L PLC" "R PLC" "Vermis"];
+
+        node_colors=["lightskyblue", "lightskyblue","sandybrown", "sandybrown","mediumpurple","mediumpurple","limegreen", "limegreen",...]
+                    "firebrick","firebrick","slategrey","slategrey","slategrey","slategrey","slategrey"];
     else
         idx_map=idx_map_s100;
+        labelregions=["L Visual" "L Somatomotor" "L Fronto-Parietal" "L Dorsal Attention" "L Ventral Attention" "L DMN" "L Limbic"...
+                       "R Visual" "R Somatomotor" "R Fronto-Parietal" "R Dorsal Attention" "R Ventral Attention" "R DMN" "R Limbic"...
+        "L Subcortical" "R Subcortical"...
+        "L Crus" "R Crus" "L PLC" "R PLC" "Vermis"];
+
+        node_colors=["lightskyblue", "sandybrown", "mediumpurple","royalblue", "gold", "limegreen", "pink",...
+            "lightskyblue", "sandybrown", "mediumpurple","royalblue", "gold", "limegreen", "pink",...
+            "firebrick","firebrick","slategrey","slategrey","slategrey","slategrey","slategrey"];
     end
 
     % Load data
@@ -51,7 +64,7 @@ end
 % Calculate number of nodes
 nnodes=size(matrices_struct.(sessions(1)),1);
 
-clear s folder idx_map_s100 idx_map_AAL116 idx_map
+clear s folder idx_map_s100 idx_map_AAL116
 
 %% Calculate metrics
 
@@ -218,35 +231,63 @@ if ~aggregate
         save("stat_"+suffix+"_c1-1","result") % Save run
     end
     
+
+
     % Display names of pairs of nodes that for a significant connection
-    % according to NBS
+    % according to NBS and plot the connectogram
 
     disp("NBS contrast [-1,1,0] ---------")
-    % Load NBS matrix
-    load("stat_"+suffix+"_c-11.mat")
-    %mat = stats.midinter.contrast(2).conmat; mat = full(cell2mat(mat));mat = mat+mat';
-    result=full(result);result = result+result';
-    % Display significant connections
-    for i=1:length(result)
-        for j=1:length(result)
-            if result(i,j)==1
-                disp(node_labels(i)+", " +node_labels(j))
+    if isfile("stat_"+suffix+"_c-11.mat")
+        % Load NBS matrix
+        load("stat_"+suffix+"_c-11.mat")
+        %mat = stats.midinter.contrast(2).conmat; mat = full(cell2mat(mat));mat = mat+mat';
+        result=full(result);result = result+result';
+        % Display significant connections
+        for i=1:length(result)
+            for j=1:length(result)
+                if result(i,j)==1
+                    disp(node_labels(i)+", " +node_labels(j))
+                end
             end
         end
+
+        % plot connectogram
+        matrix = remap_matrix(result,idx_map,true);
+        save("matrix.mat","matrix")
+        writematrix(labelregions',"label_names.txt")
+        writematrix(node_colors',"ROI_colors.txt")
+        !./pyenv/bin/python plot_connectogram.py
+
+    else
+        disp("The [-1,1,0] contrast does not have significant results")
     end
 
+
+
     disp("NBS contrast [1,-1,0] ---------")
-    % Load NBS matrix
-    load("stat_"+suffix+"_c1-1.mat")
-    %mat = stats.midinter.contrast(2).conmat; mat = full(cell2mat(mat));mat = mat+mat';
-    result=full(result);result = result+result';
-    % Display significant connections
-    for i=1:length(result)
-        for j=1:length(result)
-            if result(i,j)==1
-                disp(node_labels(i)+", " +node_labels(j))
+    if isfile("stat_"+suffix+"_c-11.mat")
+        % Load NBS matrix
+        load("stat_"+suffix+"_c1-1.mat")
+        %mat = stats.midinter.contrast(2).conmat; mat = full(cell2mat(mat));mat = mat+mat';
+        result=full(result);result = result+result';
+        % Display significant connections
+        for i=1:length(result)
+            for j=1:length(result)
+                if result(i,j)==1
+                    disp(node_labels(i)+", " +node_labels(j))
+                end
             end
         end
+
+        % plot connectogram
+        matrix = remap_matrix(result,idx_map,true);
+        save("matrix.mat","matrix")
+        writematrix(labelregions',"label_names.txt")
+        writematrix(node_colors',"ROI_colors.txt")
+        !./pyenv/bin/python plot_connectogram.py
+
+    else
+        disp("The [-1,1,0] contrast does not have significant results")
     end
 end
 
