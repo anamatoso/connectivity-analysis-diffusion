@@ -146,6 +146,40 @@ end
 
 clear g v groups name table1 table2 m d R p mdl i metrics
 
+%% GLM to include age as covariate
+
+for v=1:2
+    name="version"+v;
+    metrics_labels_list = metrics_labels.(name);
+    table_matrics_controls=array2table(metrics_struct.(name).midcycle','VariableNames',metrics_labels_list); %create table
+    table_matrics_controls.Age=dados_clinicos.controls.Age;
+    table_matrics_controls.Group=zeros(height(table_matrics_controls), 1); % add column for group
+    
+    table_matrics_patients=array2table(metrics_struct.(name).interictal','VariableNames',metrics_labels_list);
+    table_matrics_patients.Age=dados_clinicos.patients.Age;
+    table_matrics_patients.Group=ones(height(table_matrics_patients), 1); % add column for group
+    
+    data = vertcat(table_matrics_controls, table_matrics_patients);
+    for m=1:length(metrics_labels_list)
+        metric_name=metrics_labels_list(m);
+        idx = find(strcmp(data.Properties.VariableNames, metric_name));
+        metric_namefinal=strrep(metric_name, ' ', '');metric_namefinal=strrep(metric_namefinal, '_', '');metric_namefinal=strrep(metric_namefinal, '-', '');
+        data.Properties.VariableNames{idx} = char(metric_namefinal);
+        model = fitglm(data, metric_namefinal+" ~ Group + Age", 'Distribution', 'normal', 'Link', 'identity');
+        %disp(model)
+        p=model.Coefficients{"Group","pValue"};
+        
+        if (p<0.05 && v==2) || (p<0.05/nnodes && v==1)
+            disp(metrics_labels_list(m)+" corrected for age p="+p)
+        else
+            disp(metrics_labels_list(m)+" corrected for age p="+p + " ns")
+        end
+
+    end
+end
+
+
+
 %% NBS
 if ~aggregate
     disp("NBS---------")
