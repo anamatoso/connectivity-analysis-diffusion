@@ -1,6 +1,6 @@
 # Structural connectivity analysis in migraine patients
 
-This repository provides the code used to analyze the data of migraine patients in the paper: [Structural connectome changes in episodic migraine: the role of the cerebellum](https://doi.org/10.1101/2024.04.26.591265)
+This repository provides the code used to analyze the data of migraine patients in the paper: [Involvement of the cerebellum in structural connectivity enhancement in episodic migraine](https://www.biorxiv.org/content/10.1101/2024.04.26.591265v2)
 
 The overall pipeline can be seen in the picture below:
 
