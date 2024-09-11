@@ -10,7 +10,7 @@ The overall pipeline can be seen in the picture below:
 
 You'll need __MRtrix, FSL, and MATLAB installed__ on the computer you'll use to run the code. I used MRtrix version 3.0.3, FSL version 6.0.5 and MATLAB 2023a version (but older versions of MATLAB should also work).
 
-Then download this repository into a folder of your choosing by going to that folder and then cloning it:
+Then download this repository into a folder of your choosing by going to that folder and then cloning it through the terminal:
 ```bash
 git clone https://github.com/anamatoso/connectivity-analysis-diffusion.git
 ```
