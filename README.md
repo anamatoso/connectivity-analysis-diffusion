@@ -75,17 +75,19 @@ Note: don't forget to add the auxiliary functions folder to the PATH in MATLAB b
 ## Citation
 If you want to cite our work please use:
 
+Matoso, A., Fouto, A.R., Esteves, I. et al. Involvement of the cerebellum in structural connectivity enhancement in episodic migraine. J Headache Pain 25, 154 (2024). https://doi.org/10.1186/s10194-024-01854-8
+
 ```
-@article {Matoso2024.04.26.591265,
-	author = {Matoso, Ana and Fouto, Ana R and Esteves, In{\^e}s and Ruiz-Tagle, Amparo and Caetano, Gina and da Silva, Nuno A and Vilela, Pedro and Gil-Gouveia, Raquel and Nunes, Rita G and Figueiredo, Patr{\'\i}cia},
-	title = {Involvement of the cerebellum in structural connectivity enhancement in episodic migraine},
-	elocation-id = {2024.04.26.591265},
-	year = {2024},
-	doi = {10.1101/2024.04.26.591265},
-	publisher = {Cold Spring Harbor Laboratory},
-	URL = {https://www.biorxiv.org/content/early/2024/08/28/2024.04.26.591265},
-	eprint = {https://www.biorxiv.org/content/early/2024/08/28/2024.04.26.591265.full.pdf},
-	journal = {bioRxiv}
+@article{matoso2024involvement,
+  title={Involvement of the cerebellum in structural connectivity enhancement in episodic migraine},
+  author={Matoso, Ana and Fouto, Ana R and Esteves, In{\^e}s and Ruiz-Tagle, Amparo and Caetano, Gina and da Silva, Nuno A and Vilela, Pedro and Gil-Gouveia, Raquel and Nunes, Rita G and Figueiredo, Patr{\'\i}cia},
+  journal={The Journal of Headache and Pain},
+  volume={25},
+  number={1},
+  pages={1--11},
+  year={2024},
+  publisher={BioMed Central}
+  doi={10.1186/s10194-024-01854-8}
 }
 ```
 
