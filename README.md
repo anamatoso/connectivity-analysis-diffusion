@@ -23,20 +23,20 @@ The data directory structure should be the following:
 ├── 02_count_streamlines.sh                                    # Count streamlines script
 ├── bvals.bval                                                 # b-values file
 ├── data                                                       # Data folder
-    ├── sub-controlXXX_ses-[SESSION]                           # Folder with the dMRI files
-    │   ├── sub-controlXXX_ses-[SESSION]_clean.nii.gz          # dMRI image (already preprocessed)
-    │   ├── sub-controlXXX_ses-[SESSION]_clean_mask.nii.gz     # dMRI image mask 
-    │   └── sub-controlXXX_ses-[SESSION]_rotated_bvecs.bvec    # b-vectors
-    ├── sub-controlXXX                                         # Anatomic imge folder
-        └── sub-controlXXX_restored-MPRAGE_brain.nii.gz        # T1-weighted image
-    └── ...
+|   ├── sub-controlXXX_ses-[SESSION]                           # Folder with the dMRI files
+|   │   ├── sub-controlXXX_ses-[SESSION]_clean.nii.gz          # dMRI image (already preprocessed)
+|   │   ├── sub-controlXXX_ses-[SESSION]_clean_mask.nii.gz     # dMRI image mask 
+|   │   └── sub-controlXXX_ses-[SESSION]_rotated_bvecs.bvec    # b-vectors
+|   ├── sub-controlXXX                                         # Anatomic imge folder
+|   |   └── sub-controlXXX_restored-MPRAGE_brain.nii.gz        # T1-weighted image
+|   └── ...
 ├── matrix_data                                                # Output data folder (will be created automatically)
-    ├── ALL116                                                 # Folder with the connectivity matrices using the AAL116 atlas
-    └── schaefer100cersubcort                                  # Folder with the connectivity matrices using the schaefer100cersubcort atlas
+|   ├── ALL116                                                 # Folder with the connectivity matrices using the AAL116 atlas
+|   └── schaefer100cersubcort                                  # Folder with the connectivity matrices using the schaefer100cersubcort atlas
 ├── streamline_count                                           # Output streamline count folder (will be created automatically)
-    └── streamline_count_JHUlabels                            
-        ├── sub-controlXXX_ses-[SESSION]_JHUlabels.txt
-        └── ...
+|   └── streamline_count_JHUlabels                            
+|       ├── sub-controlXXX_ses-[SESSION]_JHUlabels.txt
+|       └── ...
 ├── 03_connectivity_analysis.m                                 # MATLAB script for the connectivity analysis
 ├── 04_streamline_count_analysis.m                             # Matlab script to analyse the streamline count
 ├── dados_clinicos_[GROUP].csv                                 # CSVs that contain the clinical data of each group (patients and controls)
